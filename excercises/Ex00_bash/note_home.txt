@@ -1,0 +1,2 @@
+hello from note_home
+curent path is: /c/Users/DorotaBjöörn-AI22GBG/Documents/GitHub/Data-Engineering-Dorota-Bjoorn/excercises/Ex00_bash
