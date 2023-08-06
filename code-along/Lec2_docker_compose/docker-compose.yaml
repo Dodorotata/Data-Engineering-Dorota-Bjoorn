@@ -1,0 +1,11 @@
+services:
+  python:
+    #image: python:3.11 - alt when ready image exists in docker hub or already build image, otherwise use build:
+    build: . # alt when buliding from Dockerfile (same folder)
+    ports:
+      - "8050:8050"
+    container_name: lecture2
+
+
+  #airflow: if more services besides python
+    # ...
