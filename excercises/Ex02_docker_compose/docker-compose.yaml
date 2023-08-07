@@ -1,0 +1,8 @@
+services:
+  python:
+    build: .
+    ports:
+      - "8050:8050"
+    container_name: ex2
+    volumes:
+      - ./src:/app/src
