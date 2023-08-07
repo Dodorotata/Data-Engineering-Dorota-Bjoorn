@@ -5,4 +5,4 @@ services:
       - "8050:8050"
     container_name: ex2
     volumes:
-      - ./src:/app/src
+      - ./src:/ex2/src
