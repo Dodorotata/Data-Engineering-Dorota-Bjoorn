@@ -2,7 +2,8 @@ FROM python:3.11
 
 WORKDIR /app
 
-# copy all from current local directory where Dockerfile is stored into docker container working dir
+# copy all from current local directory,
+#where Dockerfile is stored into docker container working dir
 COPY . .
 
 # packages needed

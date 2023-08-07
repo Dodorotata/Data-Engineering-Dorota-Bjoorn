@@ -6,6 +6,14 @@ services:
       - "8050:8050"
     container_name: lecture2
 
+    # named volume
+    volumes:
+      - dice_simulator:/app/src
+
+
+volumes:
+  dice_simulator:
+
 
   #airflow: if more services besides python
     # ...
