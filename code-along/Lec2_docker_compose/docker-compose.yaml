@@ -7,12 +7,16 @@ services:
     container_name: lecture2
 
     # named volume
+    # volumes:
+    #   - dice_simulator:/app/src     # name:container path
+
+    # bind mount
     volumes:
-      - dice_simulator:/app/src
+      - ./src:/app/src                # source path:container path
 
 
-volumes:
-  dice_simulator:
+# volumes:
+#   dice_simulator:
 
 
   #airflow: if more services besides python
