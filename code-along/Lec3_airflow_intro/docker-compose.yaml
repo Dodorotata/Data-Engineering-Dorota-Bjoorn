@@ -51,10 +51,10 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.3} #------- commented to bild image from own Dockerfile deciding pythonversion and packages
-  build: . #------ uncommented to build from own Dockerfile deciding python version and packages
+  build: .                                             #-------- uncommented to build from own Dockerfile deciding python version and packages
   environment:
     &airflow-common-env
-    AIRFLOW__CORE__EXECUTOR: LocalExecutor #-------- changed from CeleryExecutor => remove all Celery related => remove all Reddis related
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor #-------- changed from CeleryExecutor (run locally only)=> remove all Celery related => remove all Reddis related
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     # For backward compatibility, with Airflow <2.3
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -70,7 +70,7 @@ x-airflow-common:
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
-  volumes:
+  volumes: #---- bind mounts
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
@@ -82,6 +82,7 @@ x-airflow-common:
       condition: service_healthy
 
 services:
+  #----- database
   postgres:
     image: postgres:13
     environment:
@@ -99,6 +100,7 @@ services:
 
 #------ removed redis service
 
+  #--- for graphical user interface (GUI) on localhost to see DAGs
   airflow-webserver:
     <<: *airflow-common
     command: webserver
@@ -116,6 +118,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+  # to schedule different tasks
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
@@ -135,6 +138,7 @@ services:
 #----- removed airflow-worker servuce
 #----- removed airflow-trigger service
 
+  # run first time
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
@@ -232,5 +236,6 @@ services:
 
   #-------- removed flower service
 
+#--- named volume
 volumes:
   postgres-db-volume:
