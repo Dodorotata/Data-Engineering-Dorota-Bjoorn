@@ -23,6 +23,7 @@ df.insert(len(df.columns), "image", image_paths)
 # didn't correspond to real cities
 
 def user_map():
+    # create px from df
     fig = px.scatter_mapbox(
         data_frame=df,
         lat="latitude",
@@ -30,7 +31,7 @@ def user_map():
         hover_name="name",
         zoom=2,
     )
-
+    # additional customization of fig
     fig.update_layout(
         mapbox_style="open-street-map",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
@@ -39,16 +40,18 @@ def user_map():
     return fig
 
 
-# HACKS - workaround to load local images to dash
+# HACKS - workaround to load local images to dash - creates a Base64-encoded string that represents the image content
 def image_to_base64(image_path):
-    with open(image_path, "rb") as file:
+    with open(image_path, "rb") as file: # opens i binary readmode
         encoded_image = base64.b64encode(file.read()).decode("utf-8")
     return encoded_image
 
 
+#dfs into lists
 name_list = df["name"].to_list()
 id_list = df.index.to_list()
 
+# dictoray with {name:id, name:id, ...}
 user_options = [
     {
         "label": name,
@@ -57,6 +60,7 @@ user_options = [
     for name, id_ in zip(name_list, id_list)
 ]
 
+# initializing a Dash app instance and configuring it with an external stylesheet from the themes module
 app = Dash(__name__, external_stylesheets=[themes.FLATLY])
 
 app.layout = Container(
@@ -95,12 +99,14 @@ app.layout = Container(
 )
 
 
-@app.callback(Output("user-card", "children"), Input("users-dropdown", "value"))
+@app.callback(Output("user-card", "children"), Input("users-dropdown", "value"))  # children specifying that the content generated within the callback should be placed within the "user-card" component
 def user_card(user_id):
     image_path = (paths_directory["avatars"] / f"{user_id}.png").as_posix()
     encoded_image = image_to_base64(image_path)
 
+    # selects row in df corresponding to a user_id
     user = df.loc[user_id]
+    # card consisits of 1 row and 2 cols (left image, right text)
     card = Row(
         [
             Col(
