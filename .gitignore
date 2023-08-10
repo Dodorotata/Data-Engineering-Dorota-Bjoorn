@@ -164,3 +164,4 @@ cython_debug/
 logs
 plugins
 config
+bash_operator_working_dok.py
