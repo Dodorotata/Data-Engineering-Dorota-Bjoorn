@@ -75,9 +75,10 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-  user: "${AIRFLOW_UID:-50000}:0"
+  user: "${AIRFLOW_UID:-50000}:0" #--- used if no .env with AIRFLOW_UID file exists
   depends_on:
     &airflow-common-depends-on
+    # --- removed redis
     postgres:
       condition: service_healthy
 
