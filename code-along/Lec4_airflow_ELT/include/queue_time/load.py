@@ -1,6 +1,3 @@
-#--- gå genom denna kod----------
-
-
 from airflow.decorators import task_group
 from include.setup import datalake_path
 from airflow.operators.python import PythonOperator
@@ -8,10 +5,10 @@ import json
 
 
 def _load_datalake(task_instance):
-    data = task_instance.xcom_pull(task_ids = "extract_liseberg.transform_stockholm_timezone")
-
+    data = task_instance.xcom_pull(task_ids = "extract_liseberg.transform_stockholm_timezone") # pulls transformed data from extract
     filename = datalake_path / f"{data[0]['last_updated']}.json"
 
+    # saving data in json files with filename
     with open(filename, "w") as file:
         json.dump(data, file)
 

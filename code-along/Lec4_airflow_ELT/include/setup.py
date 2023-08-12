@@ -6,8 +6,6 @@ data_path = Path(__file__).parents[1] / "data"
 datalake_path = data_path / "data_lake"
 data_warehouse_path = data_path / "data_warehouse"
 
-#--------- gå genom denna kod----------
-
 @task_group(group_id="setup_data_directories")
 def setup_directories():
     create_directories = BashOperator(
@@ -16,7 +14,8 @@ def setup_directories():
     )
 
     success_setup = BashOperator(
-        task_id="setup_success", bash_command="echo 'setup data directories successful'"
+        task_id="setup_success",
+        bash_command="echo 'setup data directories successful'"
     )
 
     create_directories >> success_setup

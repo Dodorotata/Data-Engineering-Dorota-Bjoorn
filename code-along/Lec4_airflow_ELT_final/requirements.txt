@@ -1,2 +1,0 @@
-# for managing API kys, keep sensitive info separated from the code
-python-dotenv
