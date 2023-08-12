@@ -11,14 +11,10 @@ html_content = response.content
 soup = BeautifulSoup(html_content, "html.parser")
 
 tables = soup.find_all("table", {"class": "wikitable"})
-# select 3rd table on the page
+# select 3rd table on page, 3rd row, every other td and makes into str
 generation_table = tables[2]
-
-# add code where pokemons in row 3 in table indicate start of a new generation
-
-
-
-# this part writes to 9 files???????
+generation_row = generation_table.find_all("tr")[2]
+break_points = [int(td.string) for td in generation_row.find_all("td")[::2]]
 
 import csv
 
@@ -26,24 +22,25 @@ original_file_path = "./pokemon_list.csv"
 with open(original_file_path, "r") as original_file:
     csv_reader = csv.reader(original_file)
     
-    # Define the row numbers at which to break the file manually
-    break_points = [152, 252, 387, 494, 650, 722, 810, 906]
-    
     current_break = 0  # Index for the break_points list
     current_file_number = 1
     output_file_path = f"generation{current_file_number}.csv"
 
-    with open(output_file_path, "w", newline="") as output_file:
-        csv_writer = csv.writer(output_file)
+    output_file = open(output_file_path, "w", newline="")
+    csv_writer = csv.writer(output_file)
+    
+    # Loop through the original file and write rows to smaller files
+    for index, row in enumerate(csv_reader, start=1):
+        csv_writer.writerow(row)
         
-        # Loop through the original file and write rows to smaller files
-        for index, row in enumerate(csv_reader, start=1):
-            csv_writer.writerow(row)
+        if index == break_points[current_break]:
+            current_break += 1
+            current_file_number += 1
             
-            if index == break_points[current_break]:
-                current_break += 1
-                current_file_number += 1
-                
-                output_file_path = f"generation{current_file_number}.csv"
-                with open(output_file_path, "w", newline="") as new_output_file:
-                    csv_writer = csv.writer(new_output_file)
+            output_file.close()
+            
+            output_file_path = f"generation{current_file_number}.csv"
+            output_file = open(output_file_path, "w", newline="")
+            csv_writer = csv.writer(output_file)
+    
+    output_file.close()
