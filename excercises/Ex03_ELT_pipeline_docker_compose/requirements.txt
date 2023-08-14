@@ -1,0 +1,6 @@
+plotly.express
+dash
+dash_bootstrap_components
+pybase64
+requests
+python-time

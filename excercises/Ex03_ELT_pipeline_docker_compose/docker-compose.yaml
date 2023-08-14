@@ -1,0 +1,11 @@
+services:
+  python:
+    build: .
+    ports:
+      - "8050:8050"
+    container_name: ex3
+    volumes:
+      - users_volume:/dash/datalake/users
+    
+volumes:
+  users_volume:
