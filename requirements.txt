@@ -11,3 +11,5 @@ pyjokes==0.6.0
 python-dotenv==1.0.0
 pytz==2023.3
 Requests==2.31.0
+black
+pytest
